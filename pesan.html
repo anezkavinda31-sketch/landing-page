@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="lp.css">
+    <title>Pesan Menu - Milky Way</title>
+</head>
+<body>
+
+  <header>
+    <div class="navbar">
+      <a href="index.html" class="logo" style="text-decoration:none">🌌 Milky Way</a>
+      <nav><a href="login.html" class="ps-keluar">Keluar</a></nav>
+    </div>
+  </header>
+
+  <section class="ps-hero" style="padding-top:3.5rem">
+    <span class="float f1">🥤</span><span class="float f2">⭐</span>
+    <h1 id="sapaan">Halo, Teman Galaksi!</h1>
+    <p>Pilih rasa, atur jumlahnya, dan lihat totalnya langsung.</p>
+  </section>
+
+  <main class="ps-wrap">
+    <div>
+      <h2 class="ps-judul">🌟 Pilih Milkshake-mu</h2>
+      <div class="ps-daftar" id="daftar"></div>
+
+      <div class="ps-opsi">
+        <h3>Ukuran gelas</h3>
+        <div class="ps-chips" id="ukuran"></div>
+        <h3>Topping (per gelas)</h3>
+        <div class="ps-chips" id="topping"></div>
+        <h3>Catatan</h3>
+        <textarea id="catatan" placeholder="Contoh: es sedikit, tanpa whipped cream"></textarea>
+      </div>
+    </div>
+
+    <aside class="ps-cart" id="keranjang">
+      <h2>🛒 Pesananmu</h2>
+      <div id="isi"></div>
+      <div class="ps-meter"><div id="meter"></div></div>
+      <p class="ps-meter-teks" id="meterTeks"></p>
+      <div class="ps-total"><span>Total</span><strong id="total">Rp 0</strong></div>
+      <button class="btn-primary" id="pesan" type="button" disabled style="width:100%;margin-top:1.2rem;border:0;cursor:pointer">Pesan Sekarang 🚀</button>
+    </aside>
+  </main>
+
+  <a href="#keranjang" class="ps-bar"><span id="barJumlah">0 gelas</span><span id="barTotal">Rp 0</span></a>
+
+  <div class="ps-overlay" id="overlay" hidden>
+    <div class="ps-sukses" role="dialog" aria-modal="true" aria-labelledby="judulSukses">
+      <div class="ps-roket">🚀</div>
+      <h2 id="judulSukses">Pesanan meluncur!</h2>
+      <span class="ps-nomor" id="nomor"></span>
+      <div id="ringkas"></div>
+      <button class="btn-primary" id="lagi" type="button" style="width:100%;border:0;cursor:pointer">Pesan Lagi</button>
+    </div>
+  </div>
+
+  <script>
+    var MENU = [
+      { id: 'taro', nama: 'Taro Milky Galaxy', harga: 12000, emoji: '🟣', warna: '#8e62d9' },
+      { id: 'choco', nama: 'Choco Space Blast', harga: 15000, emoji: '🍫', warna: '#6b3f2a' },
+      { id: 'matcha', nama: 'Matcha Milky', harga: 14000, emoji: '🍵', warna: '#5c9e4f' },
+      { id: 'straw', nama: 'Strawberry Stardust', harga: 13000, emoji: '🍓', warna: '#ff6fa8' },
+      { id: 'vanilla', nama: 'Vanilla Orbit', harga: 11000, emoji: '🍦', warna: '#e8c24f' },
+      { id: 'velvet', nama: 'Red Velvet Nebula', harga: 15000, emoji: '❤️', warna: '#c0392b' }
+    ];
+    var UKURAN = [
+      { id: 'reguler', nama: 'Reguler', tambah: 0 },
+      { id: 'large', nama: 'Large (+Rp 3.000)', tambah: 3000 }
+    ];
+    var TOPPING = [
+      { id: 'boba', nama: '🧋 Boba (+Rp 3.000)', tambah: 3000 },
+      { id: 'cheese', nama: '🧀 Cheese Foam (+Rp 4.000)', tambah: 4000 },
+      { id: 'jelly', nama: '✨ Space Jelly (+Rp 2.000)', tambah: 2000 }
+    ];
+    var DISKON_MIN = 3, DISKON = 0.1;
+    var qty = {}, ukuran = 'reguler', topping = {};
+
+    function rp(n) { return 'Rp ' + Math.round(n).toLocaleString('id-ID'); }
+    function $(id) { return document.getElementById(id); }
+
+    // sapaan dari halaman login
+    try {
+      var nama = sessionStorage.getItem('mwNama');
+      if (nama) $('sapaan').textContent = 'Halo, ' + nama.charAt(0).toUpperCase() + nama.slice(1) + '!';
+    } catch (e) {}
+
+    // kartu menu
+    $('daftar').innerHTML = MENU.map(function (m) {
+      return '<div class="ps-item" id="item-' + m.id + '">' +
+        '<div class="ps-ikon" style="background:' + m.warna + '">' + m.emoji + '</div>' +
+        '<h3>' + m.nama + '</h3><div class="ps-harga">' + rp(m.harga) + '</div>' +
+        '<div class="ps-stepper">' +
+        '<button type="button" aria-label="Kurangi ' + m.nama + '" data-id="' + m.id + '" data-d="-1">−</button>' +
+        '<output id="q-' + m.id + '">0</output>' +
+        '<button type="button" aria-label="Tambah ' + m.nama + '" data-id="' + m.id + '" data-d="1">+</button>' +
+        '</div></div>';
+    }).join('');
+
+    // pilihan ukuran & topping
+    $('ukuran').innerHTML = UKURAN.map(function (u, i) {
+      return '<label class="ps-chip"><input type="radio" name="ukuran" value="' + u.id + '"' + (i === 0 ? ' checked' : '') + '><span>' + u.nama + '</span></label>';
+    }).join('');
+    $('topping').innerHTML = TOPPING.map(function (t) {
+      return '<label class="ps-chip"><input type="checkbox" value="' + t.id + '"><span>' + t.nama + '</span></label>';
+    }).join('');
+
+    $('daftar').addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      var id = b.dataset.id;
+      qty[id] = Math.max(0, Math.min(20, (qty[id] || 0) + Number(b.dataset.d)));
+      hitung();
+    });
+    $('ukuran').addEventListener('change', function (e) { ukuran = e.target.value; hitung(); });
+    $('topping').addEventListener('change', function (e) { topping[e.target.value] = e.target.checked; hitung(); });
+
+    function ringkasan() {
+      var gelas = 0, sub = 0, baris = '';
+      var uk = UKURAN.filter(function (u) { return u.id === ukuran; })[0];
+      var tops = TOPPING.filter(function (t) { return topping[t.id]; });
+      var tambah = uk.tambah + tops.reduce(function (a, t) { return a + t.tambah; }, 0);
+      var ket = uk.id === 'large' ? 'Large' : 'Reguler';
+      if (tops.length) ket += ' + ' + tops.map(function (t) { return t.nama.slice(3).split(' (')[0]; }).join(', ');
+      MENU.forEach(function (m) {
+        var q = qty[m.id] || 0; if (!q) return;
+        var s = q * (m.harga + tambah);
+        gelas += q; sub += s;
+        baris += '<div class="ps-baris"><span>' + q + '× ' + m.nama + '<small>' + ket + '</small></span><strong>' + rp(s) + '</strong></div>';
+      });
+      var potong = gelas >= DISKON_MIN ? sub * DISKON : 0;
+      return { gelas: gelas, sub: sub, potong: potong, total: sub - potong, baris: baris };
+    }
+
+    function hitung() {
+      MENU.forEach(function (m) {
+        $('q-' + m.id).textContent = qty[m.id] || 0;
+        $('item-' + m.id).classList.toggle('aktif', (qty[m.id] || 0) > 0);
+      });
+      var r = ringkasan();
+      var isi = r.baris || '<div class="ps-kosong">Belum ada pesanan. Yuk pilih milkshake dulu! 🥛</div>';
+      if (r.potong) isi += '<div class="ps-baris ps-diskon"><span>Diskon 10% (3+ gelas)</span><strong>−' + rp(r.potong) + '</strong></div>';
+      $('isi').innerHTML = isi;
+      $('total').textContent = rp(r.total);
+      $('barJumlah').textContent = r.gelas + ' gelas';
+      $('barTotal').textContent = rp(r.total);
+      $('pesan').disabled = r.gelas === 0;
+      $('meter').style.width = Math.min(100, r.gelas / DISKON_MIN * 100) + '%';
+      $('meterTeks').textContent = r.gelas >= DISKON_MIN
+        ? '🎉 Diskon 10% sudah aktif!'
+        : 'Tambah ' + (DISKON_MIN - r.gelas) + ' gelas lagi untuk diskon 10%.';
+    }
+
+    $('pesan').addEventListener('click', function () {
+      var r = ringkasan();
+      $('nomor').textContent = 'Nomor pesanan MW-' + (1000 + Math.floor(Math.random() * 9000));
+      var cat = $('catatan').value.trim();
+      $('ringkas').innerHTML = r.baris +
+        (r.potong ? '<div class="ps-baris ps-diskon"><span>Diskon 10%</span><strong>−' + rp(r.potong) + '</strong></div>' : '') +
+        (cat ? '<div class="ps-baris"><span>Catatan<small></small></span></div>' : '') +
+        '<div class="ps-total"><span>Total</span><strong>' + rp(r.total) + '</strong></div>';
+      if (cat) { var s = $('ringkas').querySelector('small'); s.textContent = cat; }
+      $('overlay').hidden = false;
+      $('lagi').focus();
+    });
+    $('lagi').addEventListener('click', function () {
+      qty = {}; topping = {}; ukuran = 'reguler';
+      document.querySelectorAll('.ps-chip input').forEach(function (i) { i.checked = i.value === 'reguler'; });
+      $('catatan').value = '';
+      $('overlay').hidden = true;
+      hitung();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    hitung();
+  </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="lp.css">
+    <title>Masuk - Milky Way</title>
+</head>
+<body class="login-body">
+
+  <span class="float f1">🥤</span>
+  <span class="float f2">⭐</span>
+  <span class="float f3">🍓</span>
+  <span class="float f4">🫐</span>
+
+  <main class="login-card">
+    <div class="login-side">
+      <div class="big">🌌</div>
+      <h2>Milky Way</h2>
+      <p>Masuk dulu, biar pesan milkshake favoritmu jadi lebih gampang.</p>
+    </div>
+
+    <div class="login-form-wrap">
+      <h1>Selamat datang!</h1>
+      <p>Masuk ke akun Milky Way kamu.</p>
+
+      <form id="form-login">
+        <label class="field">Email
+          <input type="email" name="email" placeholder="nama@email.com" required>
+        </label>
+        <label class="field">Kata sandi
+          <input type="password" name="sandi" placeholder="Masukkan kata sandi" required>
+        </label>
+        <button type="submit" class="btn-primary">Masuk</button>
+      </form>
+
+      <a href="index.html" class="login-back">← Kembali ke beranda</a>
+    </div>
+  </main>
+
+  <script>
+    // Demo tampilan: simpan nama dari email, lalu lanjut ke halaman pesan menu.
+    document.getElementById('form-login').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var email = this.elements['email'].value;
+      try { sessionStorage.setItem('mwNama', email.split('@')[0]); } catch (err) {}
+      window.location.href = 'pesan.html';
+    });
+  </script>
+</body>
+</html>
