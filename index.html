@@ -18,6 +18,7 @@
         <a href="#menu">Menu</a>
         <a href="#testimoni">Ulasan</a>
         <a href="#galeri">Galeri</a>
+        <a href="#keranjang-section" class="nav-cart-btn">🛒 Keranjang (<span id="cart-count">0</span>)</a>
         <a href="#kontak">Kontak</a>
       </nav>
     </div>
@@ -67,32 +68,72 @@
         <img src="image/taro.jpg" alt="Taro Milky Galaxy">
         <h3>Taro Milky Galaxy</h3>
         <p>Perpaduan rasa taro lembut dengan susu sapi segar.</p>
-        <span class="harga">Rp 12.000</span>
-        <a href="https://wa.me/6281234567890?text=Halo,%20saya%20mau%20pesan%20Taro%20Milky%20Galaxy" target="_blank" class="btn-primary" style="margin-top: 1rem; display: inline-block; font-size: 0.9rem; padding: 0.5rem 1rem;">Pesan Sekarang</a>
+        <span class="harga" data-price="12000">Rp 12.000</span>
+        <button onclick="tambahKeKeranjang('Taro Milky Galaxy', 12000)" class="btn-primary" style="margin-top: 1rem; border: none; cursor: pointer; display: inline-block; font-size: 0.9rem; padding: 0.5rem 1rem;">+ Tambah ke Keranjang</button>
       </div>
       <div class="menu-kartu">
         <img src="image/choco.jpg" alt="Choco Space Blast">
         <h3>Choco Space Blast</h3>
         <p>Milkshake coklat pekat dengan lelehan saus coklat asli.</p>
-        <span class="harga">Rp 15.000</span>
-        <a href="https://wa.me/628815209698?text=Halo,%20saya%20mau%20pesan%20Choco%20Space%20Blast" target="_blank" class="btn-primary" style="margin-top: 1rem; display: inline-block; font-size: 0.9rem; padding: 0.5rem 1rem;">Pesan Sekarang</a>
+        <span class="harga" data-price="15000">Rp 15.000</span>
+        <button onclick="tambahKeKeranjang('Choco Space Blast', 15000)" class="btn-primary" style="margin-top: 1rem; border: none; cursor: pointer; display: inline-block; font-size: 0.9rem; padding: 0.5rem 1rem;">+ Tambah ke Keranjang</button>
       </div>
       <div class="menu-kartu">
         <img src="image/matcha.jpg" alt="Matcha Milky">
         <h3>Matcha Milky</h3>
         <p>Rasa teh hijau khas Jepang yang wangi dan menyegarkan.</p>
-        <span class="harga">Rp 14.000</span>
-        <a href="https://wa.me/628815209698?text=Halo,%20saya%20mau%20pesan%20Matcha%20Milky" target="_blank" class="btn-primary" style="margin-top: 1rem; display: inline-block; font-size: 0.9rem; padding: 0.5rem 1rem;">Pesan Sekarang</a>
+        <span class="harga" data-price="14000">Rp 14.000</span>
+        <button onclick="tambahKeKeranjang('Matcha Milky', 14000)" class="btn-primary" style="margin-top: 1rem; border: none; cursor: pointer; display: inline-block; font-size: 0.9rem; padding: 0.5rem 1rem;">+ Tambah ke Keranjang</button>
       </div>
     </div>
 
     <div class="menu-lainnya">
       <h3>🥤 Menu Tambahan Lainnya</h3>
       <ul>
-        <li><span>Strawberry Stardust</span> <strong>Rp 13.000</strong></li>
-        <li><span>Vanilla Orbit</span> <strong>Rp 11.000</strong></li>
-        <li><span>Red Velvet Nebula</span> <strong>Rp 15.000</strong></li>
+        <li>
+          <span>Strawberry Stardust (Rp 13.000)</span> 
+          <button onclick="tambahKeKeranjang('Strawberry Stardust', 13000)" class="btn-small">+ Pesan</button>
+        </li>
+        <li>
+          <span>Vanilla Orbit (Rp 11.000)</span> 
+          <button onclick="tambahKeKeranjang('Vanilla Orbit', 11000)" class="btn-small">+ Pesan</button>
+        </li>
+        <li>
+          <span>Red Velvet Nebula (Rp 15.000)</span> 
+          <button onclick="tambahKeKeranjang('Red Velvet Nebula', 15000)" class="btn-small">+ Pesan</button>
+        </li>
       </ul>
+    </div>
+  </section>
+
+  <!-- KERANJANG & PEMBAYARAN DIGITAL -->
+  <section id="keranjang-section" class="keranjang-section" style="background: #f9f9f9; padding: 3rem 1rem; margin: 2rem 0;">
+    <div style="max-width: 600px; margin: auto; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+      <h2>🛒 Keranjang Pesanan Kamu</h2>
+      <div id="cart-items" style="margin: 1rem 0; min-height: 50px;">
+        <p style="color: #777;">Keranjang kamu masih kosong nih. Yuk pilih menu favoritmu!</p>
+      </div>
+      
+      <hr style="border: 0; border-top: 1px solid #eee; margin: 1rem 0;">
+      
+      <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold;">
+        <span>Total Pembayaran:</span>
+        <span id="cart-total" style="color: #ff3366;">Rp 0</span>
+      </div>
+
+      <!-- Pilih Metode Pembayaran -->
+      <div style="margin-top: 1.5rem;">
+        <label style="display: block; font-weight: bold; margin-bottom: 0.5rem;">Pilih Metode Pembayaran:</label>
+        <select id="payment-method" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid #ddd; font-size: 1rem;">
+          <option value="QRIS (Scan & Pay)">✨ QRIS (GoPay, OVO, DANA, BCA, ShopeePay)</option>
+          <option value="Transfer Bank (BCA)">🏦 Transfer Bank BCA</option>
+          <option value="COD / Bayar di Tempat">💵 COD (Bayar di Kedai/Tempat)</option>
+        </select>
+      </div>
+
+      <button onclick="checkoutWhatsApp()" class="btn-primary" style="width: 100%; margin-top: 1.5rem; padding: 1rem; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; background: #25d366; color: white; font-weight: bold;">
+        🚀 Checkout & Kirim Pesanan ke WhatsApp
+      </button>
     </div>
   </section>
 
@@ -148,6 +189,116 @@
   <footer>
     <p>&copy; 2026 Milky Way Milkshake - All Rights Reserved.</p>
   </footer>
+
+  <!-- JAVASCRIPT KERANJANG -->
+  <script>
+    let cart = [];
+
+    function tambahKeKeranjang(nama, harga) {
+      let item = cart.find(i => i.nama === nama);
+      if (item) {
+        item.jumlah += 1;
+      } else {
+        cart.push({ nama: nama, harga: harga, jumlah: 1 });
+      }
+      updateCartUI();
+      alert(nama + ' berhasil ditambahkan ke keranjang! 🥤');
+    }
+
+    function ubahJumlah(nama, delta) {
+      let item = cart.find(i => i.nama === nama);
+      if (item) {
+        item.jumlah += delta;
+        if (item.jumlah <= 0) {
+          cart = cart.filter(i => i.nama !== nama);
+        }
+      }
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const cartItemsContainer = document.getElementById('cart-items');
+      const cartTotalElement = document.getElementById('cart-total');
+      const cartCountElement = document.getElementById('cart-count');
+
+      cartItemsContainer.innerHTML = '';
+      let total = 0;
+      let totalQty = 0;
+
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p style="color: #777;">Keranjang kamu masih kosong nih. Yuk pilih menu favoritmu!</p>';
+        cartTotalElement.innerText = 'Rp 0';
+        cartCountElement.innerText = '0';
+        return;
+      }
+
+      cart.forEach(item => {
+        let subtotal = item.harga * item.jumlah;
+        total += subtotal;
+        totalQty += item.jumlah;
+
+        cartItemsContainer.innerHTML += `
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; border-bottom: 1px dashed #eee; padding-bottom: 0.5rem;">
+            <div>
+              <strong>${item.nama}</strong><br>
+              <small style="color: #666;">Rp ${item.harga.toLocaleString()} x ${item.jumlah}</small>
+            </div>
+            <div>
+              <button onclick="ubahJumlah('${item.nama}', -1)" style="padding: 2px 8px; cursor: pointer;">-</button>
+              <span style="margin: 0 8px;">${item.jumlah}</span>
+              <button onclick="ubahJumlah('${item.nama}', 1)" style="padding: 2px 8px; cursor: pointer;">+</button>
+            </div>
+          </div>
+        `;
+      });
+
+      cartTotalElement.innerText = 'Rp ' + total.toLocaleString();
+      cartCountElement.innerText = totalQty;
+    }
+
+    function checkoutWhatsApp() {
+      if (cart.length === 0) {
+        alert('Keranjang belanja masih kosong! Silakan pilih menu terlebih dahulu.');
+        return;
+      }
+
+      const paymentMethod = document.getElementById('payment-method').value;
+      let pesan = "Halo Kak, saya mau pesan Milkshake Milky Way:\n\n";
+      
+      let total = 0;
+      cart.forEach(item => {
+        let subtotal = item.harga * item.jumlah;
+        total += subtotal;
+        pesan += `- ${item.nama} (${item.jumlah}x) = Rp ${subtotal.toLocaleString()}\n`;
+      });
+
+      pesan += `\n*Total Pembayaran: Rp ${total.toLocaleString()}*`;
+      pesan += `\n*Metode Pembayaran: ${paymentMethod}*`;
+      pesan += `\n\nTerima kasih! Mohon segera diproses ya Kak. ✨`;
+
+      const encodedMessage = encodeURIComponent(pesan);
+      window.open(`https://wa.me/628815209698?text=${encodedMessage}`, '_blank');
+    }
+  </script>
+
+  <!-- Tambahan Styling Kecil untuk Tombol Tambahan Menu -->
+  <style>
+    .btn-small {
+      background: #ff3366;
+      color: white;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .nav-cart-btn {
+      background: #ff3366;
+      color: white !important;
+      padding: 6px 12px;
+      border-radius: 20px;
+    }
+  </style>
 
 </body>
 </html>
