@@ -191,7 +191,8 @@
   </footer>
 
   <!-- JAVASCRIPT KERANJANG -->
-  <script>
+
+    <script>
     let cart = [];
 
     function tambahKeKeranjang(nama, harga) {
@@ -202,7 +203,6 @@
         cart.push({ nama: nama, harga: harga, jumlah: 1 });
       }
       updateCartUI();
-      alert(nama + ' berhasil ditambahkan ke keranjang! 🥤');
     }
 
     function ubahJumlah(nama, delta) {
@@ -280,7 +280,6 @@
       window.open(`https://wa.me/628815209698?text=${encodedMessage}`, '_blank');
     }
   </script>
-
   <!-- Tambahan Styling Kecil untuk Tombol Tambahan Menu -->
   <style>
     .btn-small {
