@@ -192,7 +192,7 @@
 
   <!-- JAVASCRIPT KERANJANG -->
 
-    <script>
+  <script>
     let cart = [];
 
     function tambahKeKeranjang(nama, harga) {
@@ -203,6 +203,7 @@
         cart.push({ nama: nama, harga: harga, jumlah: 1 });
       }
       updateCartUI();
+      // BARIS ALERT DI BAWAH INI SUDAH DIHAPUS, JADI TIDAK AKAN MUNCUL POP-UP LAGI
     }
 
     function ubahJumlah(nama, delta) {
